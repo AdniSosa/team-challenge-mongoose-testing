@@ -1,7 +1,8 @@
 // Código de la conexión a la base de datos.
 
 const mongoose = require('mongoose');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../env/.env') });
 
 const dbConnection = async() => {
     try {

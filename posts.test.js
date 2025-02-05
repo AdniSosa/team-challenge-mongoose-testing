@@ -2,32 +2,36 @@ const request = require("supertest");
 const app = require("./index");
 const Post = require('./models/Post')
 
-describe('/create', () => {
+describe('POST /create', () => {
     afterAll(() => {
         return Post.deleteMany();
       });
     
     const post = {
-        title,
-        body
+        title: 'Hello Spring!',
+        body: 'The winter is leaving finally'
     }
-    /* it('Should create a post', async () => {
-        let postCreate = await Post.countDocuments({});
-        
-        //expect(postCreate).toBe(0);
-        const resPost = await request(app).post('/create').send(post).expect(201);
-
-        postCreate = await Post.countDocuments({});
-        expect(postCreate).toBe(1);
-    }) */
 
         it('Should create a post', async () => {
-            const resPost = await request(app).post('/create').send(post).expect(201);
-            console.log(resPost)
-            expect(resPost.body.post._id).toBeDefined();
-            expect(resPost.body.post.createdAt).toBeDefined();
-            expect(resPost.body.post.updatedAt).toBeDefined();
+            const resPost = await request(app)
+            .post('/create')
+            .send(post)
+            expect(resPost.statusCode).toBe(201);
+            expect(resPost.body.title).toBe('Hello Spring!'); 
+            expect(resPost.body.body).toBe('The winter is leaving finally'); 
+            
+            //console.log(resPost)
         })
 })
 
+describe('GET /', () => {
+
+    it('Should get all posts', async () => {
+      const resPost = await request(app)
+      .get('/')
+      .expect('Content-Type', /json/)
+      .expect(200);
+      expect(Array.isArray(resPost.body)).toBeTruthy()
+    });
+  });
 
