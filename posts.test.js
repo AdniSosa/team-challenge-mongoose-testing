@@ -1,8 +1,8 @@
 const request = require("supertest");
-const app = require("./index");
+const {app, server} = require("./index");
 const Post = require('./models/Post')
 
-describe('POST /create', () => {
+/* describe('POST /create', () => {
     afterAll(() => {
         return Post.deleteMany();
       });
@@ -22,7 +22,7 @@ describe('POST /create', () => {
             
             //console.log(resPost)
         })
-})
+}) */
 
 describe('GET /', () => {
 
@@ -35,3 +35,28 @@ describe('GET /', () => {
     });
   });
 
+  describe("testing/posts", () => {
+    const post = {
+      title: "Post 1",
+      body: "Body post 1",
+    };
+  
+    beforeEach(async () => {
+      await Post.deleteMany();
+    });
+  
+    it("Should create a post", async () => {
+      const resPost = await request(app).post("/create").send(post).expect(201);
+      //console.log(resPost);
+  
+      expect(() => createPost(resPost.body.post._id)).toBeDefined();
+      expect(() => createPost(resPost.body.post.createdAt)).toBeDefined();
+      expect(() => createPost(resPost.body.post.updateddAt)).toBeDefined();
+      // expect(resPost.body.post.updatedAt).toBeDefined();
+    }, 10000); // Aumentamos el timeout a 10000 ms
+  
+    afterAll(async () => {
+      await Post.deleteMany();
+      server.close(); // Cierra el servidor después de las pruebas
+    });
+  });

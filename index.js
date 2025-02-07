@@ -12,8 +12,8 @@ app.use('/', routes);
 
 dbConnection();
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server listening on http://localhost:${PORT}`)
 })
 
-module.exports = app;
+module.exports = {app, server};
